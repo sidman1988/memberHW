@@ -1,0 +1,158 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "2020-02-25T05:01:21Z",
+    "title": "dev-otmembership"
+  },
+  "host": "jut38k2ick.execute-api.us-east-2.amazonaws.com",
+  "basePath": "/dev",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/membership": {
+      "get": {
+        "description": "Get all membership users in the system",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved members",
+            "schema": {
+              "$ref": "#/definitions/members"
+            }
+          },
+          "400": {
+            "description": "Error retrieving members"
+          }
+        }
+      },
+      "post": {
+        "description": "Save a new membership user to the system",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "member",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/member"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully saved member",
+            "schema": {
+              "$ref": "#/definitions/member"
+            }
+          },
+          "400": {
+            "description": "Error saving member"
+          }
+        }
+      }
+    },
+    "/membership/{id}": {
+      "get": {
+        "description": "Gets an existing membership user in the system, the URL parameter is the ID of the member",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved members",
+            "schema": {
+              "$ref": "#/definitions/member"
+            }
+          },
+          "400": {
+            "description": "Error retrieving members"
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes a membership user in the system, URL parameter is the ID of the member you are deleting",
+        "responses": {
+          "200": {
+            "description": "Successfully deleted member"
+          },
+          "400": {
+            "description": "Error deleting member"
+          }
+        }
+      },
+      "patch": {
+        "description": "Updates an existng membership user in the system, the URL parameter is the ID if the member",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "member",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/member"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated member",
+            "schema": {
+              "$ref": "#/definitions/member"
+            }
+          },
+          "400": {
+            "description": "Error updating member"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "members": {
+      "title": "MembersCollection",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "member": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "MemberSchema"
+    }
+  }
+}

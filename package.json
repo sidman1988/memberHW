@@ -1,0 +1,12 @@
+{
+    "scripts": {
+        "test": "mocha 'tests/**/*.js'"
+    },
+    "dependencies": {
+        "bluebird": "^3.7.2",
+        "uuid": "^7.0.0"
+    },
+    "devDependencies": {
+        "mocha": "^7.0.1"
+    }
+}

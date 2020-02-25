@@ -1,0 +1,116 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: otmembership
+# app and org for use with dashboard.serverless.com
+app: ot-membership-app
+org: cohen1821
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    MEMBERSHIP_TABLE: OT_Membership
+    DATASOURCE: DynamoDb
+  stage: dev
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-2:*:table/${self:provider.environment.MEMBERSHIP_TABLE}"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:us-east-2:*:table/${self:provider.environment.MEMBERSHIP_TABLE}"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+# you can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
+
+functions:
+  createMember:
+    handler: api/membership.create
+    description: Creates a new membership user in the system.
+    events:
+      - http:
+          path: membership
+          method: post
+  updateMember:
+    handler: api/membership.update
+    description: Updates an existing membership user in the system.
+    events:
+      - http:
+          path: membership/{id}
+          method: patch
+  deleteMember:
+    handler: api/membership.delete
+    description: Deletes an existing membership user in the system.
+    events:
+      - http:
+          path: membership/{id}
+          method: delete
+  getMember:
+    handler: api/membership.get
+    description: Get all membership users.
+    events:
+      - http:
+          path: membership
+          method: get
+  getMemberById:
+    handler: api/membership.getById
+    description: Get a membership user by id.
+    events:
+      - http:
+          path: membership/{id}
+          method: get
+
+resources:
+  Resources:
+    MembershipDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.MEMBERSHIP_TABLE}
