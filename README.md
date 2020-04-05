@@ -1,5 +1,3 @@
-This is the HW For Orange theory
-
 This was setup using Serverless, you will need to have serverless installed globally on your npm instance, and setup serverless to
 integrate with your amazon account
 
